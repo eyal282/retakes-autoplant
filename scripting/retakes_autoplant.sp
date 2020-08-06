@@ -26,7 +26,7 @@ enum //Bombsites
 public Plugin myinfo =
 {
     name = "[Retakes] Autoplant",
-    author = "B3none",
+    author = "B3none, Bug fix by Eyal282 to work on Ofir's Retakes",
     description = "Automatically plant the bomb at the start of the round. This will work with all versions of the retakes plugin.",
     version = "2.3.1",
     url = "https://github.com/b3none"
@@ -56,14 +56,10 @@ public Action OnRoundStart(Event eEvent, const char[] sName, bool bDontBroadcast
     bomber = GetBomber();
     
     if (IsValidClient(bomber))
-    {
-        bombsite = GetNearestBombsite(bomber);
-        
+    {   
         int bomb = GetPlayerWeaponSlot(bomber, 4);
         
         hasBombBeenDeleted = SafeRemoveWeapon(bomber, bomb);
-        
-        GetClientAbsOrigin(bomber, bombPosition);
         
         delete bombTimer;
         
@@ -88,6 +84,10 @@ public Action PlantBomb(Handle timer, int client)
     {
         if (hasBombBeenDeleted)
         {
+            bombsite = GetNearestBombsite(bomber);
+        
+            GetClientAbsOrigin(bomber, bombPosition);
+        
             int bombEntity = CreateEntityByName("planted_c4");
 
             GameRules_SetProp("m_bBombPlanted", 1);
